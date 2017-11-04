@@ -32,7 +32,17 @@ func TestCoderBasic(t *testing.T) {
 		t.Error(err)
 	}
 
-	result = "|0000a||0000b||0001b|" //abab
+	result = "|0000a||0000b||0001b|" //ab[ab]
+	if c.result != result {
+		t.Errorf("Expected %s, got %s", result, c.result)
+	}
+
+	err = c.output("ab", "c")
+	if err != nil {
+		t.Error(err)
+	}
+
+	result = "|0000a||0000b||0001b||0003c|" //abab[abc]
 	if c.result != result {
 		t.Errorf("Expected %s, got %s", result, c.result)
 	}
