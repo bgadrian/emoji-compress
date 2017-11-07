@@ -2,14 +2,12 @@ package lz78
 
 import (
 	"fmt"
-	"strings"
 )
 
 //Decompress ...
 func Decompress(s string) (string, error) {
 
-	// replace all ||
-	s = strings.Replace(s, "|", "", -1)
+	// initialize empty output
 	output := ""
 
 	// integer index for dic map, must be integer for autoincrement
@@ -23,38 +21,31 @@ func Decompress(s string) (string, error) {
 		dic.m = make(map[string]*dictEntry)
 	}
 
-	// iterate 5 by 5
-	for i := 5; i <= len(s); i = i + 5 {
+	// iterate 7 by 7
+	for i := 7; i <= len(s); i = i + 7 {
 
-		idx := string(s[i-5 : i-1])
-		k := string(s[i-1 : i])
+		idx := string(s[i-6 : i-2])
+		k := string(s[i-2 : i-1])
 
-		fmt.Println("Index: ", idx, " Character : ", k)
+		// create string index for dictionary map
+		strMapIndex := fmt.Sprintf("%04d", mapIndex)
 
-		// all 0000 idx must create new record in dictionary
-		if idx == "0000" {
-
-			// create string index for dictionary map
-			strMapIndex := fmt.Sprintf("%04d", mapIndex)
-
-			dic.m[strMapIndex] = &dictEntry{w, k, w.s + k}
-
-			// incremetn integer index for dic map
-			mapIndex++
-
-			// create new instance of dictEntry
-			w = &dictEntry{}
-
-			// add to output
-			output = output + k
-			continue
+		// if idx == "0000" no search for value
+		if idx != "0000" {
+			dicPoint := dic.m[idx]
+			w.s = dicPoint.s
 		}
 
-		// add key to buffer
-		w.s = w.s + k
+		dic.m[strMapIndex] = &dictEntry{w, k, w.s + k}
 
-		pnt := dic.m[idx]
-		output = output + pnt.s + k
+		// incremetn integer index for dic map
+		mapIndex++
+
+		// add to output
+		output = output + w.s + k
+
+		// create new instance of dictEntry
+		w = &dictEntry{}
 	}
 
 	return output, nil
