@@ -4,6 +4,11 @@ import (
 	"unicode/utf8"
 )
 
+//CompressString ...
+func CompressString(s string) (string, error) {
+	return Compress([]byte(s))
+}
+
 //Compress ...
 func Compress(input []byte) (string, error) {
 
