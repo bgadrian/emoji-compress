@@ -25,13 +25,7 @@ func Compress(input []byte) (string, error) {
 
 		wk, found := dic.contains(w, k)
 
-		// check if is last rune
-		if utf8.RuneCount(input) == 0 {
-			coder.output(w.s, k)
-			continue
-		}
-
-		if found {
+		if found && len(input) > 0 {
 			w = wk
 			continue
 		}
