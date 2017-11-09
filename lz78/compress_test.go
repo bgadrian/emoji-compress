@@ -29,3 +29,17 @@ func TestCompressMore(t *testing.T) {
 		t.Errorf("Expected %s, got %s", out, r)
 	}
 }
+
+func TestCompressRepetableString(t *testing.T) {
+	in := "-!@-!@-!@-!@-!@-!@"
+	out := "|0000-||0000!||0000@||0001!||0003-||0002@||0004@||0007-||0002@|"
+
+	r, err := Compress([]byte(in))
+	if err != nil {
+		t.Error(err)
+	}
+
+	if r != out {
+		t.Errorf("Expected %s, got %s", out, r)
+	}
+}
