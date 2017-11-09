@@ -5,6 +5,7 @@ import "strings"
 
 import "github.com/sergi/go-diff/diffmatchpatch"
 import "fmt"
+import "io/ioutil"
 
 func TestDecompressBasic(t *testing.T) {
 	in := "|0000a||0000b||0001b||0000c||0002a|"
@@ -86,6 +87,18 @@ Exit:
 				break Exit
 			}
 		}
+	}
+}
+
+func TestHeavy(t *testing.T) {
+	s, e := ioutil.ReadFile("big-poetry.txt")
+	if e != nil {
+		t.Error("Cant read file")
+	}
+
+	err := compareInOut(string(s))
+	if err != nil {
+		t.Error(err)
 	}
 }
 
