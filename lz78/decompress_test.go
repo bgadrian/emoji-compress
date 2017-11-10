@@ -56,6 +56,8 @@ func TestFullTableASCII(t *testing.T) {
 		"123456789012",
 		"~!@~!@~!@~!@~!@~!@",
 		"Broasca are sau nu are mere?",
+		//utf8 diacritics
+		"A fost odată ca-n poveşti,\nA fost ca niciodată.\nDin rude mari împărăteşti,\nO prea frumoasă fată.",
 		//TODO add more here
 	}
 
@@ -91,6 +93,12 @@ Exit:
 }
 
 func TestHeavy(t *testing.T) {
+	defer func() {
+		if r := recover(); r != nil {
+			t.Error("Recovered in TestHeavy", r)
+		}
+		return
+	}()
 	s, e := ioutil.ReadFile("big-poetry.txt")
 	if e != nil {
 		t.Error("Cant read file")

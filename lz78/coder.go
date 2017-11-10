@@ -3,6 +3,8 @@ package lz78
 import (
 	"errors"
 	"fmt"
+	"io"
+	"strconv"
 )
 
 //coder handles LZ78 result => output file and output file => LZ78
@@ -36,8 +38,58 @@ func (e *coder) output(ws, k string) error {
 	return nil
 }
 
-//decode from ...
-func (e *coder) decode() (dictionary, error) {
+type decoder struct {
+	archive []rune
+	// dic     dictionary
+	tmp []*dictEntry
+}
 
-	return dictionary{}, nil
+func newDecoder(archive string) *decoder {
+	d := &decoder{}
+	d.archive = []rune(archive)
+	// d.dic = make(map[string]*dictEntry, 10)
+	d.tmp = append(d.tmp, &dictEntry{nil, "", ""})
+	return d
+}
+
+//decode from ...
+func (e *decoder) decode() (phrase string, err error) {
+	runesLeft := len(e.archive)
+	if runesLeft == 0 {
+		return "", io.EOF
+	}
+
+	if runesLeft < 7 {
+		return "", fmt.Errorf("Malformed archive, left: %s",
+			string(e.archive))
+	}
+
+	current := e.archive[:7]
+	e.archive = e.archive[7:]
+
+	addressStr := string(current[1:5])
+	k := string(current[5])
+	address, er := strconv.Atoi(addressStr)
+
+	if er != nil {
+		err = er
+		return
+	}
+	w := &dictEntry{k: k, s: k}
+
+	//prepend the value from the previous Address
+	if address > 0 {
+		w.w = e.tmp[address]
+
+		if w.w == nil {
+			err = fmt.Errorf("malformed, address not yet found %s %s",
+				addressStr, string(current))
+			return
+		}
+		w.s = w.w.s + w.k
+	}
+	e.tmp = append(e.tmp, w)
+
+	phrase = w.s
+	return
 }
