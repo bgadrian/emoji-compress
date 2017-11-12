@@ -7,45 +7,39 @@ import "github.com/sergi/go-diff/diffmatchpatch"
 import "fmt"
 import "io/ioutil"
 
-func TestDecompressBasic(t *testing.T) {
-	in := "|0000a||0000b||0001b||0000c||0002a|"
-	out := "ababcba"
+type casesInOut []inOut
 
-	r, err := Decompress(in)
-	if err != nil {
-		t.Error(err)
-	}
-
-	if r != out {
-		t.Errorf("Expected %s, got %s", out, r)
-	}
+type inOut struct {
+	in  string
+	out string
 }
 
-func TestDecompressMultipleSequnces(t *testing.T) {
-	in := "|0000a||0000b||0001b||0003c|"
-	out := "abababc"
+func TestDecompresInOut(t *testing.T) {
 
-	r, err := Decompress(in)
-	if err != nil {
-		t.Error(err)
+	c := casesInOut{
+		{
+			in:  "|0000a||0000b||0001b||0000c||0002a|",
+			out: "ababcba",
+		},
+		{
+			in:  "|0000a||0000b||0001b||0003c|",
+			out: "abababc",
+		},
+		{
+			in:  "|0000|||0000b||0001b||0003c|",
+			out: "|b|b|bc",
+		},
 	}
 
-	if r != out {
-		t.Errorf("Expected %s, got %s", out, r)
-	}
-}
+	for _, e := range c {
+		r, err := Decompress(e.in)
+		if err != nil {
+			t.Error(err)
+		}
 
-func TestDecompressPipeCharacter(t *testing.T) {
-	in := "|0000|||0000b||0001b||0003c|"
-	out := "|b|b|bc"
-
-	r, err := Decompress(in)
-	if err != nil {
-		t.Error(err)
-	}
-
-	if r != out {
-		t.Errorf("Expected %s, got %s", out, r)
+		if r != e.out {
+			t.Errorf("Expected %s, got %s", e.out, r)
+		}
 	}
 }
 
@@ -58,6 +52,10 @@ func TestFullTableASCII(t *testing.T) {
 		"Broasca are sau nu are mere?",
 		//utf8 diacritics
 		"A fost odată ca-n poveşti,\nA fost ca niciodată.\nDin rude mari împărăteşti,\nO prea frumoasă fată.",
+		"[原文]篭毛與 美篭母乳 布久思毛與 美夫君志持 此岳尓 菜採須兒 家吉閑名 告<紗>根 虚見津 山跡乃國者 押奈戸手 吾許曽居 師<吉>名倍手 吾己曽座 我<許>背齒 告目 ...",
+		"Text^=+Text^=+Text^=+Tex^=+Tex^=+Tex^^=+Tx^^=+x^^=+x^^=+x^^=++x^^=+++x^^=+++x^~,!?:;'\"'`.%&*)([]{}|",
+		" يرتبط القادة باستخدام. بالرغم واشتدّت باستخدام تعد من. كل الأرض لليابان ارتكبها لها, إذ بين ووصف تكتيكاً الإحتفاظ, من أضف ",
+		"φαβελλασ πετεντιθμ vελ νε, ατ νισλ σονετ οπορτερε εθμ",
 		//TODO add more here
 	}
 
