@@ -1,5 +1,7 @@
 package emojis
 
+var inlinemap map[string]struct{}
+
 //inlinedb Simplest database, should be enough for now KISS.
 var inlinedb = []string{
 	"😀",

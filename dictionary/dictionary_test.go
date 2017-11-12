@@ -58,12 +58,12 @@ func TestAllForOne(t *testing.T) {
 	source := ".! alfa /?'"
 	emoji := ""
 	var err error
-	db := emojis.Database{}
+	db := emojis.Iterator{}
 
 	for err == nil {
-		emoji, err = db.Fetch()
+		emoji, err = db.NextSingleRune()
 		if err != nil {
-			if err.Error() != emojis.ErrFinished {
+			if err != emojis.EOF {
 				t.Error(err)
 			}
 			break
