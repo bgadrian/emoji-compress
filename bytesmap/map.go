@@ -1,5 +1,6 @@
 package bytesmap
 
+//populated at init and used by the Decoder as a cache/fast lookup structure.
 var reversedb map[rune]byte
 
 func init() {

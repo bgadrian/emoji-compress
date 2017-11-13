@@ -19,6 +19,9 @@ The function **Iterator.NextSingleRune()** is used to fetch the next single-rune
 ```
 
 Emojis package has unit tests, GoDoc and Examples.
-We use this package in our Encoding and Compressiong algorithms we have built for academic (and fun) purposes.
+*The emojis are hardcoded for now, until we can find a better solution.*\
 
-*The emojis are hardcoded for now, until we can find a better solution.*
+### About
+This package is part of a [group of emoji-related encoding and compression algorithms](https://github.com/bgadrian/emoji-compressor) built for fun and academic purposes in Go.
+
+Copyright (c) 2017 [B.G.Adrian](https://coder.today) & @Davidescu

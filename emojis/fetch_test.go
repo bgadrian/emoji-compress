@@ -60,7 +60,7 @@ func TestSingleRuneBasic(t *testing.T) {
 
 func TestUnique(t *testing.T) {
 	db := Iterator{}
-	uniq := make(map[string]struct{}, 1000)
+	uniq := make(map[string]struct{})
 	emoji := ""
 	var err error
 	count := 0

@@ -12,7 +12,7 @@ import (
 
 //Iterator An iterator over all the emoji database. Fetch 1 at a time.
 type Iterator struct {
-	c int
+	pos int
 }
 
 //EOF Fetch functions use this error to gracefully alert that they
@@ -21,12 +21,12 @@ var EOF = errors.New("EOF")
 
 //Next server the next unique emoji from the internal DB.
 func (e *Iterator) Next() (string, error) {
-	if e.c >= len(inlinedb) {
+	if e.Done() {
 		return "", EOF
 	}
 
-	emoji := inlinedb[e.c]
-	e.c++
+	emoji := inlinedb[e.pos]
+	e.pos++
 
 	return emoji, nil
 }
@@ -45,6 +45,11 @@ func (e *Iterator) NextSingleRune() (string, error) {
 	//  https://en.wikipedia.org/wiki/Variation_Selectors_(Unicode_block)
 
 	return emoji, err
+}
+
+//Done Check if the iterator finished going trough all the emojis.
+func (e *Iterator) Done() bool {
+	return e.pos >= len(inlinedb)
 }
 
 //IsEmoji Detect if a rune is part of our internal DB.
