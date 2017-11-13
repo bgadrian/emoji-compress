@@ -1,36 +1,20 @@
 package emojis
 
 import (
+	"fmt"
 	"testing"
 )
 
-func TestBasic(t *testing.T) {
-	db := Database{}
-	for i := 0; i < 13; i++ {
-		emoji, err := db.Fetch()
-
-		if err != nil {
-			t.Error(err)
-		}
-
-		if len(emoji) == 0 || emoji == "" {
-			t.Error("expected an emoji got empty string")
-		}
-
-		t.Log("got:"+emoji, []rune(emoji))
-	}
-}
-
 func TestEmptyAndIsEmoji(t *testing.T) {
-	db := Database{}
+	db := Iterator{}
 	emoji := ""
 	var err error
 	count := 0
 
 	for err == nil {
-		emoji, err = db.Fetch()
+		emoji, err = db.Next()
 		if err != nil {
-			if err.Error() != ErrFinished {
+			if err != EOF {
 				t.Error(err)
 			}
 			break
@@ -40,25 +24,51 @@ func TestEmptyAndIsEmoji(t *testing.T) {
 			t.Errorf("found an empty emoji :( at %d runes %d", count, []rune(emoji))
 		}
 
+		if IsEmoji(emoji) == false {
+			t.Errorf("isemoji didn't worked for %s", emoji)
+		}
+
+		count++
+	}
+
+	t.Logf("Found %d emojis", count)
+}
+
+func TestSingleRuneBasic(t *testing.T) {
+	db := Iterator{}
+	emoji := ""
+	var err error
+	count := 0
+
+	for err == nil {
+		emoji, err = db.NextSingleRune()
+		if err != nil {
+			if err != EOF {
+				t.Error(err)
+			}
+			break
+		}
+
 		asRunes := []rune(emoji)
-		if IsEmoji(asRunes[0]) == false {
-			t.Errorf("illegal detection didn't worked for %s %v", emoji, asRunes)
+		if len(asRunes) != 1 {
+			t.Errorf("singlerune() returned a multi rune %s %v", emoji, asRunes)
 		}
 		count++
 	}
+	t.Logf("Found %d single rune emojis", count)
 }
 
 func TestUnique(t *testing.T) {
-	db := Database{}
+	db := Iterator{}
 	uniq := make(map[string]struct{}, 1000)
 	emoji := ""
 	var err error
 	count := 0
 
 	for err == nil {
-		emoji, err = db.Fetch()
+		emoji, err = db.Next()
 		if err != nil {
-			if err.Error() != ErrFinished {
+			if err != EOF {
 				t.Error(err)
 			}
 			break
@@ -73,4 +83,14 @@ func TestUnique(t *testing.T) {
 
 		uniq[emoji] = struct{}{}
 	}
+}
+
+func ExampleIterator() {
+	db := &Iterator{}
+	a, _ := db.Next()
+	b, _ := db.Next()
+	c, _ := db.Next()
+
+	fmt.Printf("Emojis: %s %s %s", a, b, c)
+	// Output: Emojis: 😀 😬 😁
 }

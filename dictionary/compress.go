@@ -31,7 +31,7 @@ func Compress(input []byte) (r *Result, err error) {
 	r.Archive = ""
 
 	word := ""
-	db := emojis.Database{}
+	db := emojis.Iterator{}
 
 	step := func() {
 		if len(word) <= min {
@@ -40,7 +40,7 @@ func Compress(input []byte) (r *Result, err error) {
 		//we have a word to replace
 		emoji, ok := r.Words[word]
 		if ok == false {
-			emoji, err = db.Fetch()
+			emoji, err = db.NextSingleRune()
 			if err != nil {
 				return
 			}
@@ -55,7 +55,7 @@ func Compress(input []byte) (r *Result, err error) {
 		nextRune, size := utf8.DecodeRune(input)
 		input = input[size:]
 		isCompressable := unicode.IsLetter(nextRune) || unicode.IsDigit(nextRune)
-		isEmoji := emojis.IsEmoji(nextRune)
+		isEmoji := emojis.IsEmoji(string(nextRune))
 
 		if isEmoji {
 			//it is a simple algorithm, you are asking for too much

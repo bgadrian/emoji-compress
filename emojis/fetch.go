@@ -1,49 +1,58 @@
+//Package emojis can be used as an iterator over most of the emoji in
+//Unicode in a predefined (but random) order.
+//The emojis are hardcoded for now, until we can find a better solution.
+//Usage:
+// db := Iterator{}
+// db.Next() //returns "😀"
 package emojis
 
 import (
 	"errors"
-	"unicode"
 )
 
-//Database An iterator over all the emoji database. Fetch 1 at a time.
-type Database struct {
+//Iterator An iterator over all the emoji database. Fetch 1 at a time.
+type Iterator struct {
 	c int
 }
 
-//ErrFinished Fetch returns this when the iterator is finished
-const ErrFinished = "we ran out of emojis :("
+//EOF Fetch functions use this error to gracefully alert that they
+//reached the end.
+var EOF = errors.New("EOF")
 
-//Fetch Return 1 emoji at a time from the "database".
-func (e *Database) Fetch() (string, error) {
+//Next server the next unique emoji from the internal DB.
+func (e *Iterator) Next() (string, error) {
 	if e.c >= len(inlinedb) {
-		return "", errors.New(ErrFinished)
+		return "", EOF
 	}
 
 	emoji := inlinedb[e.c]
 	e.c++
 
+	return emoji, nil
+}
+
+//NextSingleRune Return the next emoji which consists of just 1 rune.
+//Attention! All emojis runes have >= 2 bytes, 1 rune (character) doesn't mean 1 byte.
+func (e *Iterator) NextSingleRune() (string, error) {
+	emoji, err := e.Next()
+
+	for len([]rune(emoji)) > 1 && err == nil {
+		emoji, err = e.Next()
+	}
 	//TODO temporary fix until we find a lib/way to detect
 	//composed emojis for decompression
 	// 	https://en.wikipedia.org/wiki/Zero-width_joiner
 	//  https://en.wikipedia.org/wiki/Variation_Selectors_(Unicode_block)
-	if len([]rune(emoji)) > 1 {
-		// log.Printf("skipping %d", []rune(emoji))
-		return e.Fetch()
-	}
 
-	return emoji, nil
+	return emoji, err
 }
 
-//IsEmoji Detect if a rune is reserved character.
-func IsEmoji(r rune) bool {
-
+//IsEmoji Detect if a rune is part of our internal DB.
+func IsEmoji(r string) bool {
+	_, ok := inlinemap[r]
+	return ok
 	//TODO check only for the emojis from INLINEDB, not all Symbols
 	//http://www.fileformat.info/info/unicode/category/So/index.htm
-	return unicode.IsOneOf([]*unicode.RangeTable{
-		unicode.So,
-	}, r)
-
-	// emotes := unicode.Ran
 	// switch value {
 	//     case 0x1F600...0x1F64F, // Emoticons
 	//         0x1F300...0x1F5FF, // Misc Symbols and Pictographs
@@ -55,4 +64,11 @@ func IsEmoji(r rune) bool {
 	//         65024...65039, // Variation selector
 	//         8400...8447: // Combining Diacritical Marks for Symbols
 	//         return true
+}
+
+func init() {
+	inlinemap = make(map[string]struct{}, len(inlinedb))
+	for _, e := range inlinedb {
+		inlinemap[e] = struct{}{}
+	}
 }

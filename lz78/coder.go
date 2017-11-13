@@ -40,14 +40,13 @@ func (e *coder) output(ws, k string) error {
 
 type decoder struct {
 	archive []rune
-	// dic     dictionary
-	tmp []*dictEntry
+	tmp     []*dictEntry
 }
 
 func newDecoder(archive string) *decoder {
 	d := &decoder{}
 	d.archive = []rune(archive)
-	// d.dic = make(map[string]*dictEntry, 10)
+	//because we need the Dictionary Addresses to start from 1 not 0
 	d.tmp = append(d.tmp, &dictEntry{nil, "", ""})
 	return d
 }
@@ -60,7 +59,7 @@ func (e *decoder) decode() (phrase string, err error) {
 	}
 
 	if runesLeft < 7 {
-		return "", fmt.Errorf("Malformed archive, left: %s",
+		return "", fmt.Errorf("malformed archive, left: %s",
 			string(e.archive))
 	}
 
@@ -68,28 +67,30 @@ func (e *decoder) decode() (phrase string, err error) {
 	e.archive = e.archive[7:]
 
 	addressStr := string(current[1:5])
-	k := string(current[5])
+	k := string(current[5]) //it's the A from |0001A|
 	address, er := strconv.Atoi(addressStr)
 
 	if er != nil {
 		err = er
 		return
 	}
-	w := &dictEntry{k: k, s: k}
+	wCurrent := &dictEntry{k: k, s: k} //0000 w: nil, k: k, s:"" + k
 
 	//prepend the value from the previous Address
 	if address > 0 {
-		w.w = e.tmp[address]
+		wCurrent.w = e.tmp[address]
 
-		if w.w == nil {
+		if wCurrent.w == nil {
 			err = fmt.Errorf("malformed, address not yet found %s %s",
 				addressStr, string(current))
 			return
 		}
-		w.s = w.w.s + w.k
+		wCurrent.s = wCurrent.w.s + wCurrent.k
 	}
-	e.tmp = append(e.tmp, w)
 
-	phrase = w.s
+	//do not move this line before in the function
+	e.tmp = append(e.tmp, wCurrent)
+
+	phrase = wCurrent.s
 	return
 }
