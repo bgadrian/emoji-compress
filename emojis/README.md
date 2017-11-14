@@ -24,4 +24,4 @@ Emojis package has unit tests, GoDoc and Examples.
 ### About
 This package is part of a [group of emoji-related encoding and compression algorithms](https://github.com/bgadrian/emoji-compressor) built for fun and academic purposes in Go.
 
-Copyright (c) 2017 [B.G.Adrian](https://coder.today) & @Davidescu
+Copyright (c) 2017 [B.G.Adrian](https://coder.today) & @Davidescus
