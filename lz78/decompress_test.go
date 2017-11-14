@@ -13,6 +13,16 @@ type inOut struct {
 	out string
 }
 
+func ExampleDecompressString() {
+	in := "|0000a||0000b||0001b||0000c||0002a|"
+	out, err := Decompress(in)
+	if err != nil {
+		log.Panic(err)
+	}
+	fmt.Printf("Decompressed string: %s", out)
+	// Output: Decompressed string: ababcba
+}
+
 func TestDecompressInOut(t *testing.T) {
 
 	c := casesInOut{
@@ -40,14 +50,4 @@ func TestDecompressInOut(t *testing.T) {
 			t.Errorf("Expected %s, got %s", e.out, r)
 		}
 	}
-}
-
-func ExampleDecompressString() {
-	in := "|0000a||0000b||0001b||0000c||0002a|"
-	out, err := Decompress(in)
-	if err != nil {
-		log.Panic(err)
-	}
-	fmt.Printf("Decompressed string: %s", out)
-	// Output: Decompressed string: ababcba
 }

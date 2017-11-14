@@ -16,7 +16,7 @@ A byte can have only **255** possible values, so we only need
 
 ### Source
 The package is a Go port of @ayende 's [emoji encoder](https://ayende.com/blog/177729/emoji-encoding-a-new-style-for-binary-encoding-for-the-web). He also uses it to encode the Licenses for his product when they are sent to the customers.
->There are other advantages. This data is actually a 256 bits key for use in encryption. And you can actually show it to a user and have a reasonably good chance that they will be able to tell it apart from something else. It rely on the ability of humans to recognize shapes, but it will be very hard for them to actually tell someone your key. 
+>There are other advantages. This data is actually a 256 bits key for use in encryption. And you can actually show it to a user and have a reasonably good chance that they will be able to tell it apart from something else. It rely on the ability of humans to recognize shapes, but it will be very hard for them to actually tell someone your key.
 
 
 ## Example
@@ -43,4 +43,4 @@ This package has unit tests, GoDoc and Examples.
 ### About
 This package is part of a [group of emoji-related encoding and compression algorithms](https://github.com/bgadrian/emoji-compressor) built for fun and academic purposes in Go.
 
-Copyright (c) 2017 [B.G.Adrian](https://coder.today) & @Davidescu
+Copyright (c) 2017 [B.G.Adrian](https://coder.today) & @Davidescus
