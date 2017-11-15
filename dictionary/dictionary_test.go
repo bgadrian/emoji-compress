@@ -1,6 +1,9 @@
 package dictionary
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
 	"strings"
 	"testing"
 	"unicode/utf8"
@@ -54,7 +57,7 @@ func TestDecompressBasic(t *testing.T) {
 }
 
 //we test a decompress for each emoji in the DB
-func TestAllForOne(t *testing.T) {
+func TestDecompressAllEmojis(t *testing.T) {
 	source := ".! alfa /?'"
 	emoji := ""
 	var err error
@@ -87,35 +90,49 @@ func TestAllForOne(t *testing.T) {
 }
 
 func TestTable(t *testing.T) {
-	table := []string{
+	words := []string{
 		"",
-		" ",
-		"                              ",
-		" `~!@#$%^&*()_+=-:\";'{}[]<>?/.,",
+		" `~!@#$%^&*",
+		" `()_+=-:\";'",
+		" `{}[]<>?/.,",
 		// "😆~", //not supported yet
-		"Alfa's arm is smaller then beta's,beta's arms is bigger!",
-		"new .\n line %%",
-		"One 25 year old twin stays on earth while the other, fresh out of astronaut school, sets off on a space voyage travelling at 90%% of the speed of light.\n After 10 years in space, with her mission accomplished, she turns round and heads back to earth. By the time she lands she knows from her on-board clock that 20 years have passed. She is now 45 years old. Fortunately, her study of relativity has prepared her for the shock when she sees her twin sister, who is now 71 years old.",
-		//TODO add more crazy utf8 scenarios
+		" \n line %%",
+		//from here https://golang.org/src/unicode/utf8/utf8_test.go
+		"語þ日¥本¼語i日©",
+		"日a本b語ç日ð本Ê",
+		"日a本b語ç日ð本Ê語þ",
+		"日¥本¼語i日©日a本b,",
+		"語ç日ð本Ê語þ日¥本¼語",
+		"i日©日a本b語ç日ð本Ê語þ日¥本¼語i日©",
 	}
 
-	for _, source := range table {
-		comp, err := CompressString(source)
+	phrases := []string{
+		"%",
+		"%, %.",
+		"%, %? %...%! % .",
+	}
 
-		if err != nil {
-			t.Error(err)
-			continue
-		}
+	for _, word := range words {
+		for _, phrase := range phrases {
+			source := strings.Replace(phrase, "%", word, -1)
+			comp, err := CompressString(source)
 
-		decomp, err := Decompress(comp)
-		if err != nil {
-			t.Error(err)
-			continue
-		}
-		// fmt.Println(source, "=>", comp.Archive)
+			if err != nil {
+				t.Error(err)
+				continue
+			}
+			// fmt.Println(comp.Archive)
 
-		if strings.Compare(decomp, source) != 0 {
-			showDiff(source, decomp, t)
+			decomp, err := Decompress(comp)
+			if err != nil {
+				t.Error(err)
+				continue
+			}
+			// fmt.Println(source, "=>", comp.Archive)
+
+			if strings.Compare(decomp, source) != 0 {
+				showDiff(source, decomp, t)
+			}
 		}
 	}
 }
@@ -132,6 +149,57 @@ func showDiff(source, decomp string, t *testing.T) {
 			txtDiffs += "\n--		" + diff.Text
 		}
 	}
-	t.Errorf("source malformed after decompress \nexp %s %s \n got %s", source, txtDiffs, decomp)
+	t.Errorf("source malformed after decompress \nexp %+q \n%+q \n got %+q", source, txtDiffs, decomp)
 
+}
+
+func Example() {
+	//snippet of Sonnet 40 Take all my loves, my love, yea, take them all BY WILLIAM SHAKESPEARE
+	sonnet := "Take all my loves, my love, yea, take them all:" +
+		"\nWhat hast thou then more than thou hadst before?" +
+		"\nNo love, my love, that thou mayst true love call—" +
+		"\nAll mine was thine before thou hadst this more."
+
+	result, err := CompressString(sonnet)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	fmt.Printf("Archive: %s", result.Archive)
+	j, err := json.Marshal(result.Words)
+	fmt.Printf("\nDictionary: %s", j)
+
+	// Output: Archive: 😀 😬 my 😁, my 😂, 🤣, 😃 😄 😬:
+	// 😅 😆 😇 😉 😊 🙂 😇 🙃 😋?
+	// No 😂, my 😂, 😌 😇 😍 😘 😂 😗—
+	// 😙 😚 😜 😝 😋 😇 🙃 😛 😊.
+	// Dictionary: {"All":"😙","Take":"😀","What":"😅","all":"😬","before":"😋","call":"😗","hadst":"🙃","hast":"😆","love":"😂","loves":"😁","mayst":"😍","mine":"😚","more":"😊","take":"😃","than":"🙂","that":"😌","them":"😄","then":"😉","thine":"😝","this":"😛","thou":"😇","true":"😘","was":"😜","yea":"🤣"}
+}
+
+func ExampleDecompressString() {
+	archive := "😀 😬 my 😁, my 😂, 🤣, 😃 😄 😬:" +
+		"\n😅 😆 😇 😉 😊 🙂 😇 🙃 😋?" +
+		"\nNo 😂, my 😂, 😌 😇 😍 😘 😂 😗—" +
+		"\n😙 😚 😜 😝 😋 😇 🙃 😛 😊."
+
+	dict := map[string]string{
+		"All": "😙", "Take": "😀", "What": "😅", "all": "😬",
+		"before": "😋", "call": "😗", "hadst": "🙃", "hast": "😆",
+		"love": "😂", "loves": "😁", "mayst": "😍", "mine": "😚",
+		"more": "😊", "take": "😃", "than": "🙂", "that": "😌",
+		"them": "😄", "then": "😉", "thine": "😝", "this": "😛",
+		"thou": "😇", "true": "😘", "was": "😜", "yea": "🤣",
+	}
+
+	original, err := DecompressString(dict, archive)
+
+	if err != nil {
+		log.Panic(err)
+	}
+
+	fmt.Printf("Poetry: %s", original)
+	// Output: Poetry: Take all my loves, my love, yea, take them all:
+	// What hast thou then more than thou hadst before?
+	// No love, my love, that thou mayst true love call—
+	// All mine was thine before thou hadst this more.
 }

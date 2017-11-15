@@ -85,7 +85,7 @@ func TestUnique(t *testing.T) {
 	}
 }
 
-func ExampleIterator() {
+func Example() {
 	db := &Iterator{}
 	a, _ := db.Next()
 	b, _ := db.Next()

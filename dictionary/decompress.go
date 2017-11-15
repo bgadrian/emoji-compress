@@ -1,14 +1,15 @@
 package dictionary
 
-//DecompressString ...
-func DecompressString(dict map[string]string, s string) (string, error) {
+//DecompressString is an overload for Decompress.
+func DecompressString(dict map[string]string, archive string) (string, error) {
 	return Decompress(&Result{
 		Words:   dict,
-		Archive: s,
+		Archive: archive,
 	})
 }
 
-//Decompress Returns a string from the emoji encoded version.
+//Decompress reverse an encoded/compressed emoji text to the original form,
+//using the provided dictionary (resulted by the Compress function).
 func Decompress(r *Result) (string, error) {
 	r.Source = ""
 	reversed := make(map[string]string, len(r.Words))

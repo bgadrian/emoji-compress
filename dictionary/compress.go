@@ -8,25 +8,16 @@ import (
 	"github.com/bgadrian/emoji-compressor/emojis"
 )
 
-//Result Contains the original phrase, dictionary and other data for Compress and Decompress
-type Result struct {
-	Words   map[string]string `json:"dict"`
-	Source  string            `json:"source"`
-	Archive string            `json:"archive"`
-	Ratio   float32           `json:"ratio"`
-}
-
-const min int = 2
-
-//CompressString Compress a string using emojis instead of words.
+//CompressString is an overload for Compress.
 func CompressString(s string) (*Result, error) {
 	return Compress([]byte(s))
 }
 
-//Compress Compress a string using emojis instead of words.
-func Compress(input []byte) (r *Result, err error) {
+//Compress a string by replacing it's words with emojis.
+//The result will contain a map of words/emojis that can be used to revert the process.
+func Compress(original []byte) (r *Result, err error) {
 	r = &Result{}
-	r.Source = string(input)
+	r.Source = string(original)
 	r.Words = make(map[string]string, 100)
 	r.Archive = ""
 
@@ -51,10 +42,10 @@ func Compress(input []byte) (r *Result, err error) {
 	}
 
 	//go trough each character
-	for utf8.RuneCount(input) > 0 {
-		nextRune, size := utf8.DecodeRune(input)
-		input = input[size:]
-		isCompressable := unicode.IsLetter(nextRune) || unicode.IsDigit(nextRune)
+	for utf8.RuneCount(original) > 0 {
+		nextRune, size := utf8.DecodeRune(original)
+		original = original[size:]
+		isWordDelimiter := unicode.IsSpace(nextRune) || unicode.IsPunct(nextRune)
 		isEmoji := emojis.IsEmoji(string(nextRune))
 
 		if isEmoji {
@@ -64,11 +55,11 @@ func Compress(input []byte) (r *Result, err error) {
 			return
 		}
 
-		if isCompressable {
+		if isWordDelimiter == false {
 			word += string(nextRune)
 			continue
 		}
-		//else is a non alfa numeric character
+		//else is a word delimiter
 
 		//we have leftovers
 		step()
