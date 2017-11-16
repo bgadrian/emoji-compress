@@ -1,6 +1,8 @@
 package lz78
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestCompressBasic(t *testing.T) {
 	in := "ababcba"
@@ -43,3 +45,13 @@ func TestCompressRepetableString(t *testing.T) {
 		t.Errorf("Expected %s, got %s", out, r)
 	}
 }
+
+// func ExampleCompress() {
+// 	in := "Play with emojis!"
+// 	out, err := Compress([]byte(in))
+// 	if err != nil {
+// 		log.Panic(err)
+// 	}
+// 	fmt.Printf("%s", out)
+// 	// Output: |0000P||0000l||0000a||0000y||0000 ||0000w||0000i||0000t||0000h||0005e||0000m||0000o||0000j||0007s||0000!|
+// }
