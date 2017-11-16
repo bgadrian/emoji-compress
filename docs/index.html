@@ -1,13 +1,26 @@
----
+--- 
 layout: default
-title: {{ site.name }}
 ---
 
+<div>
+  <h3>LZ78 - compression</h3>
+  <p>SOON</p>
+</div>
+<div>
+  <h3>Bytes map - encoding</h3>
+  <p>SOON</p>
+</div>
+<div>
+  <h3>Dictionary - replacing words</h3>
+  <p>SOON</p>
+</div>
+
 <div id="home">
-  <h1>Blog Posts</h1>
-  <ul class="posts">
-    {% for post in site.posts %}
-      <li><span>{{ post.date | date_to_string }}</span> &raquo; <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></li>
-    {% endfor %}
-  </ul>
+  <h1>About</h1>
+  <p>
+    <strong>Emoji-compressor</strong> is an open-source library, written in Go, as a side-project. This website is just a demo for
+    the package.</p>
+  <p>We have ported to Go some known basic encoding and compression algorithms and added the emoji twist. Some of the methods
+    may result in smaller texts (as in the number of characters), but larger in bytes.</p>
+
 </div>
