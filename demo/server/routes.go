@@ -1,10 +1,13 @@
 package server
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"io"
 	"log"
 	"net/http"
+	"strings"
 )
 
 //Response API base result structure
@@ -42,20 +45,24 @@ func (h simpleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 		}
 		if err := json.NewEncoder(w).Encode(resp); err != nil {
-			log.Printf("error response %v", err)
+			log.Printf("error writing response: %v", err)
 		}
 	}()
 
 	w.Header().Set("Content-Type", "application/json")
 	resp.Ok = true
 
+	values := r.URL.Query()
+	payload := values.Get("payload")
 	//anti-flood
-	r.Body = http.MaxBytesReader(w, r.Body, maxPayloadBytes)
-	decoder := json.NewDecoder(r.Body)
-	err := decoder.Decode(&req)
-	if err != nil {
+	reader := io.LimitReader(strings.NewReader(payload), maxPayloadBytes)
+	baseDecoder := base64.NewDecoder(base64.URLEncoding, reader)
+	jsonDecoder := json.NewDecoder(baseDecoder)
+	err := jsonDecoder.Decode(&req)
+	if err != nil && err != io.EOF {
 		resp.Ok = false
 		resp.Err = err.Error()
+		log.Println("error decoding request:", err)
 		return
 	}
 
@@ -74,6 +81,7 @@ func (h simpleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		resp.Ok = false
 		resp.Err = err.Error()
+		log.Println("erro handling: ", err)
 		return
 	}
 	return

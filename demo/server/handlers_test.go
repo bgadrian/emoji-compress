@@ -1,8 +1,9 @@
 package server
 
 import (
-	"bytes"
+	"encoding/base64"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -49,15 +50,22 @@ func TestTableall(t *testing.T) {
 	//thanks to https://elithrar.github.io/article/testing-http-handlers-go/
 	for _, test := range table {
 		info := test.method + " " + test.url
-		resp, err := json.Marshal(test.payload)
+		jsonRequest, err := json.Marshal(test.payload)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		req, err := http.NewRequest(test.method, test.url, bytes.NewReader(resp))
+		base64Request := base64.URLEncoding.EncodeToString(jsonRequest)
+
+		req, err := http.NewRequest(test.method, test.url, nil)
 		if err != nil {
 			t.Fatal(err)
 		}
+
+		values := req.URL.Query()
+		values.Add("payload", base64Request)
+		req.URL.RawQuery = values.Encode()
+		fmt.Println(test, req.URL.String())
 
 		rr := httptest.NewRecorder()
 		handler := NewHandler()

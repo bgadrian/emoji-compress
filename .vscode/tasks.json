@@ -4,8 +4,8 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build & run",
-            "command": "go build -o server.exe && ./server.exe",
+            "label": "appengine",
+            "command": "dev_appserver.py ./demo/appengine/app.yaml",
             "group": {
                 "kind": "build",
                 "isDefault": true
