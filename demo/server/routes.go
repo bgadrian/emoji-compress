@@ -60,7 +60,10 @@ func (h simpleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if appengine.IsDevAppServer() {
 		w.Header().Add("Access-Control-Allow-Origin", "*")
+	} else {
+		w.Header().Add("Access-Control-Allow-Origin", "http://emoji-compress.com")
 	}
+
 	resp.Ok = true
 
 	//anti-flood
