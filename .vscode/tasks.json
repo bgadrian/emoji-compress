@@ -4,12 +4,21 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "appengine",
+            "label": "dev appengine",
             "command": "dev_appserver.py ./demo/appengine/app.yaml",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
+            "type": "shell",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "dev jekyll",
+            "command": "jekyll serve --source ./docs",
+            "group": "build",
             "type": "shell",
             "problemMatcher": [
                 "$go"

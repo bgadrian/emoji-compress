@@ -1,13 +1,13 @@
 package server
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"io"
 	"log"
 	"net/http"
-	"strings"
+
+	"google.golang.org/appengine"
 )
 
 //Response API base result structure
@@ -23,9 +23,14 @@ type Request struct {
 	Dict map[string]string `json:"dict"`
 }
 
+const (
+	OperationEncode = iota //0
+	OperationDecode        //1
+)
+
 var maxPayloadBytes int64 = 10000
-var errMethod = errors.New("Request GET for compress, POST for decompress, payload: {text:\"youtetext\"}")
-var err404 = errors.New("Supported resources: /bytesmap, /dictionary, /lz78")
+var errMethod = errors.New("We support only POST requests with a json body payload: {text:\"youtetext\"}")
+var err404 = errors.New("Supported resources: /bytesmap, /dictionary, /lz78 with /encode and /decode calls.")
 
 type simpleHandler struct {
 }
@@ -53,14 +58,14 @@ func (h simpleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	w.Header().Set("Content-Type", "application/json")
+	if appengine.IsDevAppServer() {
+		w.Header().Add("Access-Control-Allow-Origin", "*")
+	}
 	resp.Ok = true
 
-	values := r.URL.Query()
-	payload := values.Get("payload")
 	//anti-flood
-	reader := io.LimitReader(strings.NewReader(payload), maxPayloadBytes)
-	baseDecoder := base64.NewDecoder(base64.URLEncoding, reader)
-	jsonDecoder := json.NewDecoder(baseDecoder)
+	r.Body = http.MaxBytesReader(w, r.Body, maxPayloadBytes)
+	jsonDecoder := json.NewDecoder(r.Body)
 	err := jsonDecoder.Decode(&req)
 	if err != nil && err != io.EOF {
 		resp.Ok = false
@@ -73,10 +78,14 @@ func (h simpleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// req.Text = norm.NFC.Bytes()
 
 	switch r.URL.Path {
-	case "/bytesmap":
-		err = handleBytesmap(&req, &resp, r)
-	case "/dictionary":
-		err = handleDictionary(&req, &resp, r)
+	case "/bytesmap/encode":
+		err = handleBytesmap(OperationEncode, &req, &resp)
+	case "/bytesmap/decode":
+		err = handleBytesmap(OperationDecode, &req, &resp)
+	case "/dictionary/encode":
+		err = handleDictionary(OperationEncode, &req, &resp)
+	case "/dictionary/decode":
+		err = handleDictionary(OperationDecode, &req, &resp)
 	default:
 		err = err404
 	}

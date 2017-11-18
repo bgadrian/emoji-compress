@@ -1,9 +1,8 @@
 package server
 
 import (
-	"encoding/base64"
+	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -12,7 +11,6 @@ import (
 )
 
 type one struct {
-	method   string
 	url      string
 	payload  *Request
 	status   int
@@ -30,42 +28,36 @@ var dicres1 = dictionary.Result{
 }
 
 var table = []one{
-	{http.MethodGet, "/xxx", &Request{},
-		http.StatusBadRequest, &Response{Ok: false, Err: err404.Error()}},
-	{http.MethodPut, "/bytesmap", &Request{Text: "127.0.0.1"},
-		http.StatusBadRequest, &Response{Ok: false, Err: errMethod.Error()}},
+	{"/xxx", &Request{},
+		http.StatusNotFound, &Response{Ok: false, Err: err404.Error()}},
+	// {"/bytesmap", &Request{Text: "127.0.0.1"},
+	// http.StatusNotFound, &Response{Ok: false, Err: errMethod.Error()}},
 
-	{http.MethodGet, "/bytesmap", &Request{Text: "127.0.0.1"},
+	{"/bytesmap/encode", &Request{Text: "127.0.0.1"},
 		http.StatusOK, &Response{Ok: true, Result: "🙇🙈🙍🙀🙆🙀🙆🙀🙇"}},
-	{http.MethodPost, "/bytesmap", &Request{Text: "🙇🙈🙍🙀🙆🙀🙆🙀🙇"},
+	{"/bytesmap/decode", &Request{Text: "🙇🙈🙍🙀🙆🙀🙆🙀🙇"},
 		http.StatusOK, &Response{Ok: true, Result: "127.0.0.1"}},
 
-	{http.MethodGet, "/dictionary", &Request{Text: dicres1.Source},
+	{"/dictionary/encode", &Request{Text: dicres1.Source},
 		http.StatusOK, &Response{Ok: true, Result: dicres1}},
-	{http.MethodPost, "/dictionary", &Request{Text: dicres1.Archive, Dict: dicres1.Words},
+	{"/dictionary/decode", &Request{Text: dicres1.Archive, Dict: dicres1.Words},
 		http.StatusOK, &Response{Ok: true, Result: dicres1.Source}},
 }
 
 func TestTableall(t *testing.T) {
 	//thanks to https://elithrar.github.io/article/testing-http-handlers-go/
 	for _, test := range table {
-		info := test.method + " " + test.url
-		jsonRequest, err := json.Marshal(test.payload)
+		info := test.url
+		body := new(bytes.Buffer)
+		err := json.NewEncoder(body).Encode(test.payload)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		base64Request := base64.URLEncoding.EncodeToString(jsonRequest)
-
-		req, err := http.NewRequest(test.method, test.url, nil)
+		req, err := http.NewRequest("POST", test.url, body)
 		if err != nil {
 			t.Fatal(err)
 		}
-
-		values := req.URL.Query()
-		values.Add("payload", base64Request)
-		req.URL.RawQuery = values.Encode()
-		fmt.Println(test, req.URL.String())
 
 		rr := httptest.NewRecorder()
 		handler := NewHandler()
