@@ -39,11 +39,14 @@ func (h simpleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var req Request
 
 	defer func() {
-		if resp.Ok {
-			w.WriteHeader(http.StatusOK)
-		} else {
+		if resp.Err == err404.Error() {
+			w.WriteHeader(http.StatusNotFound)
+		} else if resp.Ok == false {
 			w.WriteHeader(http.StatusBadRequest)
+		} else {
+			w.WriteHeader(http.StatusOK)
 		}
+
 		if err := json.NewEncoder(w).Encode(resp); err != nil {
 			log.Printf("error writing response: %v", err)
 		}

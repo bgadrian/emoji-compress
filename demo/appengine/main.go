@@ -11,11 +11,7 @@ func main() {
 	router := server.NewHandler()
 	hl := server.NewLogger(router)
 
-	//TODO find a way to specify the handler and work in APPEngine
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		hl.ServeHTTP(w, r)
-		// w.Write([]byte("aleluia"))
-		return
-	})
+	//the app engine takes care of the HTTP server
+	http.Handle("/", hl)
 	appengine.Main()
 }
