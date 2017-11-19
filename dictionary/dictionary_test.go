@@ -8,7 +8,7 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"github.com/bgadrian/emoji-compressor/emojis"
+	"github.com/bgadrian/emoji-compress/emojis"
 
 	"github.com/sergi/go-diff/diffmatchpatch"
 )

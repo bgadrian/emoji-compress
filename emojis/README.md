@@ -1,4 +1,4 @@
-# Emoji Iterator - Go package  [![GoDoc](https://godoc.org/golang.org/x/tools/cmd/godoc?status.svg)](https://godoc.org/github.com/bgadrian/emoji-compressor/emojis)
+# Emoji Iterator - Go package  [![GoDoc](https://godoc.org/golang.org/x/tools/cmd/godoc?status.svg)](https://godoc.org/github.com/bgadrian/emoji-compress/emojis)
 The package emojis can be used as an iterator over most of the emoji in Unicode in a predefined (but random) order.
 
 Current count: **1183 emojis** from which **1011** have 1 rune length.
@@ -26,6 +26,6 @@ Emojis package has unit tests, GoDoc and Examples.
 *The emojis are hardcoded for now, until we can find a better solution.*\
 
 ### About
-This package is part of a [group of emoji-related encoding and compression algorithms](https://github.com/bgadrian/emoji-compressor) built for fun and academic purposes in Go.
+This package is part of a [group of emoji-related encoding and compression algorithms](https://github.com/bgadrian/emoji-compress) built for fun and academic purposes in Go.
 
 Copyright (c) 2017 [B.G.Adrian](https://coder.today) & @Davidescus

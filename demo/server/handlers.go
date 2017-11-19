@@ -1,11 +1,11 @@
 package server
 
 import (
-	"github.com/bgadrian/emoji-compressor/lz78"
+	"github.com/bgadrian/emoji-compress/lz78"
 
-	"github.com/bgadrian/emoji-compressor/dictionary"
+	"github.com/bgadrian/emoji-compress/dictionary"
 
-	"github.com/bgadrian/emoji-compressor/bytesmap"
+	"github.com/bgadrian/emoji-compress/bytesmap"
 )
 
 func handleBytesmap(op int, req *Request, resp *Response) (err error) {

@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/bgadrian/emoji-compressor/demo/server"
+	"github.com/bgadrian/emoji-compress/demo/server"
 	"google.golang.org/appengine"
 )
 

@@ -1,4 +1,4 @@
-# Dictionary emoji encoding  [![GoDoc](https://godoc.org/golang.org/x/tools/cmd/godoc?status.svg)](https://godoc.org/github.com/bgadrian/emoji-compressor/dictionary)
+# Dictionary emoji encoding  [![GoDoc](https://godoc.org/golang.org/x/tools/cmd/godoc?status.svg)](https://godoc.org/github.com/bgadrian/emoji-compress/dictionary)
 Package dictionary is a small package that allows encoding (or compression) of strings by replacing each unique word with an emoji.
 
 Each compress generates a new dictionary and an encoded version of the text (archive), based on the words found in the text.
@@ -52,6 +52,6 @@ The decompress process requires the "Archived" (encoded) version of the text, an
 This package has unit tests, GoDoc and Examples.
 
 ### About
-This package is part of a [group of emoji-related encoding and compression algorithms](https://github.com/bgadrian/emoji-compressor) built for fun and academic purposes in Go.
+This package is part of a [group of emoji-related encoding and compression algorithms](https://github.com/bgadrian/emoji-compress) built for fun and academic purposes in Go.
 
 Copyright (c) 2017 [B.G.Adrian](https://coder.today) & @Davidescus

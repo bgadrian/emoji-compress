@@ -7,7 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/bgadrian/emoji-compressor/dictionary"
+	"github.com/bgadrian/emoji-compress/dictionary"
 )
 
 type one struct {

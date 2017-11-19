@@ -61,7 +61,7 @@ func (h simpleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if appengine.IsDevAppServer() {
 		w.Header().Add("Access-Control-Allow-Origin", "*")
 	} else {
-		w.Header().Add("Access-Control-Allow-Origin", "http://emoji-compress.com")
+		w.Header().Add("Access-Control-Allow-Origin", "https://emoji-compress.com")
 	}
 
 	resp.Ok = true

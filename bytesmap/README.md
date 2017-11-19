@@ -1,12 +1,10 @@
-# Bytesmap emoji encoding  [![GoDoc](https://godoc.org/golang.org/x/tools/cmd/godoc?status.svg)](https://godoc.org/github.com/bgadrian/emoji-compressor/bytesmap)
+# Bytesmap emoji encoding  [![GoDoc](https://godoc.org/golang.org/x/tools/cmd/godoc?status.svg)](https://godoc.org/github.com/bgadrian/emoji-compress/bytesmap)
 The package bytesmap can be used to encode strings into emojis.
-Can be useful to "humanize" hard to remember/recognize texts such as
-Hashes, keys, other encodes like base64, ip's and so on.
+Can be used to "humanize" hard to remember/recognize texts such as Hashes, keys, other encodes like base64, ip's and so on.
 
 Depending on the text the result may have fewer characters,
 but definately will have more bytes in length, so is not an
-efficient compresison method, is just an encoding like base64,
-but way cooler and friendlier.
+efficient compresison method, is just an encoding like base64, but way cooler and friendlier.
 
 
 ### Demo
@@ -45,6 +43,6 @@ The package is a Go port of @ayende 's [emoji encoder](https://ayende.com/blog/1
 This package has unit tests, GoDoc and Examples.
 
 ### About
-This package is part of a [group of emoji-related encoding and compression algorithms](https://github.com/bgadrian/emoji-compressor) built for fun and academic purposes in Go.
+This package is part of a [group of emoji-related encoding and compression algorithms](https://github.com/bgadrian/emoji-compress) built for fun and academic purposes in Go.
 
 Copyright (c) 2017 [B.G.Adrian](https://coder.today) & @Davidescus

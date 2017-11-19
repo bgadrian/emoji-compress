@@ -5,7 +5,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/bgadrian/emoji-compressor/emojis"
+	"github.com/bgadrian/emoji-compress/emojis"
 )
 
 //CompressString is an overload for Compress.

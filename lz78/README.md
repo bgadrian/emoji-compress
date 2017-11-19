@@ -1,4 +1,4 @@
-# LZ78 compressing algorithm [![GoDoc](https://godoc.org/golang.org/x/tools/cmd/godoc?status.svg)](https://godoc.org/github.com/bgadrian/emoji-compressor/lz78)
+# LZ78 compressing algorithm [![GoDoc](https://godoc.org/golang.org/x/tools/cmd/godoc?status.svg)](https://godoc.org/github.com/bgadrian/emoji-compress/lz78)
 The package LZ78 can be used to compress and decompress strings into something nice: emojis.
  
  [LZ78](https://en.wikipedia.org/wiki/LZ77_and_LZ78)
@@ -47,7 +47,7 @@ This package has unit tests, GoDoc and Examples.
 * https://unicode.org/emoji/charts/full-emoji-list.html
 
 ### About
-This package is part of a [group of emoji-related encoding and compression algorithms](https://github.com/bgadrian/emoji-compressor) built for fun and academic purposes in Go.
+This package is part of a [group of emoji-related encoding and compression algorithms](https://github.com/bgadrian/emoji-compress) built for fun and academic purposes in Go.
 
 Copyright (c) 2017 [B.G.Adrian](https://coder.today) & @Davidescus
 

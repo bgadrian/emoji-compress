@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/bgadrian/emoji-compressor/emojis"
+	"github.com/bgadrian/emoji-compress/emojis"
 )
 
 //coder handles LZ78 result => output file and output file => LZ78
