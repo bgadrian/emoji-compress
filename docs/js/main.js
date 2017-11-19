@@ -1,7 +1,7 @@
 
 var API = {
-    // base: "https://appengine.emoji-compress.com/",
-    base: "http://127.0.0.1:8080/",
+    base: "https://appengine.emoji-compress.com/",
+    // base: "http://127.0.0.1:8080/",
     call: function (payload, handler, callback) {
         var targetUri = new URL(this.base + handler);
         //https://developer.mozilla.org/en-US/docs/Web/API/Request/Request
