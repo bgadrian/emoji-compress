@@ -1,0 +1,30 @@
+
+    /*descriptions*/
+#home div p {
+    font-size:0.8em;
+    text-align:justify;
+}
+#home div {
+    text-align:center;
+}
+
+#home div table tr {
+    border: 1px dotted yellowgreen;
+    height:auto;
+}
+#home div table td {
+    display: inline-block;
+    border:none;
+}
+
+#home div table {
+    width:90%;
+    margin: 0 auto;
+    border-spacing: collapse;
+    border:none;
+    height:auto;
+}
+
+#home div textarea {
+    width: 16em;
+}

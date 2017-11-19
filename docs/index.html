@@ -2,13 +2,36 @@
 layout: default
 ---
 
+<div id="home">
+
 <div>
-  <h3>LZ78 - compression</h3>
-  <p>SOON</p>
+  <h1><a href="https://github.com/bgadrian/emoji-compress/tree/master/lz78">LZ78 - compression</a></h1>
+  <p><a href="https://en.wikipedia.org/wiki/LZ77_and_LZ78" target="_blank">LZ78</a> 
+  is a lossless data compression algorithm, which form the basis of several ubiquitous compression schemes, 
+  including GIF and the DEFLATE algorithm used in PNG and ZIP.</p>
+  <p>It has a simple <a href"http://www.stringology.org/DataCompression/lz78/index_en.html">algorithm</a>
+  which consist of finding repeating phrases (sequences of characters) and storing them in a tree like dictionary.</p>
+  <table>
+    <tbody>
+      <tr>
+        <td><textarea id="lz78_encode_in" placeholder="The text to be encoded" rows="3" wrap="soft" cols="20">“No heart is so hard as the timid heart.”</textarea></td>
+        <td><button id="lz78_encode_btn">Encode</button></td>
+        <td><textarea readonly="true" id="lz78_encode_out" placeholder="Press Encode" rows="3" wrap="soft" cols="20"></textarea></td>
+      </tr>
+      <tr>
+        <td><textarea id="lz78_decode_in" placeholder="The text to be decoded" rows="3" wrap="soft" cols="20"></textarea></td>
+        <td><button id="lz78_decode_btn">Decode</button></td>
+        <td><textarea readonly="true" id="lz78_decode_out" placeholder="Press Decode" rows="3" wrap="soft" cols="20">“Even if they are djinns, I will get djinns that can outdjinn them.”</textarea></td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 <div>
-  <h3>Bytes map - encoding</h3>
-  <p>TODO</p>
+  <h1><a href="https://github.com/bgadrian/emoji-compress/tree/master/bytesmap">Bytes map - encoding</a></h1>
+  <p>It is a simple encoding method be useful to "humanize" hard to remember/recognize texts such as Hashes, keys, other encodes like base64, ip's and so on.</p>
+  <p>The algorithm is very simple: it split the string in a series of bytes, and map each byte by its value to an unique emoji. A byte can have only 255 possible values, so we only need 
+  255 different emojis to encode ... anything. The package is a Go port of @ayende's 
+  <a href="https://ayende.com/blog/177729/emoji-encoding-a-new-style-for-binary-encoding-for-the-web" target="_blank">emoji encoder</a>. </p>
   <table>
     <tbody>
       <tr>
@@ -25,14 +48,33 @@ layout: default
   </table>
 </div>
 <div>
-  <h3>Dictionary - replacing words</h3>
-  <p>SOON</p>
+  <h1><a href="https://github.com/bgadrian/emoji-compress/tree/master/dictionary">Dictionary - replacing words</a></h1>
+  <p>Package dictionary is a small package that allows encoding (or compression) of strings by replacing each unique word with an emoji.
+  Each compress generates a new dictionary and an encoded version of the text (archive), based on the words found in the text. </p>
+  <p>There are some technical limitations: you cannot have emojis in the original text; 
+only works with a max of 1000 unique words and a new dictionary is generated for each text.</p>
+ <table>
+    <tbody>
+      <tr>
+        <td><textarea id="dictionary_encode_in" placeholder="The text to be encoded" rows="6" wrap="soft" cols="20">“I felt happy because I saw the others were happy and because I knew I should feel happy, but I wasn’t really happy.”</textarea></td>
+        <td><button id="dictionary_encode_btn">Encode</button></td>
+        <td><textarea readonly="true" id="dictionary_encode_out" placeholder="Press Encode" rows="3" wrap="soft" cols="20">“I 😀 😬 😁 I 😂 🤣 😃 😄 😬 😅 😁 I 😆 I 😇 😉 😬, 😊 I 🙂’t 🙃 😬.”</textarea>
+        <br /><textarea readonly="true" id="dictionary_encode_dictionary_out" placeholder="Press Encode" rows="2" wrap="soft" cols="20">{"and":"😅","because":"😁","but":"😊","feel":"😉","felt":"😀","happy":"😬","knew":"😆","others":"😃","really":"🙃","saw":"😂","should":"😇","the":"🤣","wasn":"🙂","were":"😄"}</textarea></td>
+      </tr>
+      <tr>
+        <td><textarea id="dictionary_decode_in" placeholder="The text to be decoded" rows="3" wrap="soft" cols="20"> “😀 😬 😁 a 😂, 🤣 😂 😁 a 😃, 😄 😅 🤣 😬 😆 a 😂 😇 😉 😊 🙂 🙃 😋 it, 😄 😌 😍 😘 😗 😙 a 😚 😜 in 😝 😛.”</textarea>
+        <br /><textarea readonly="true" id="dictionary_decode_dictionary_in" placeholder="The dictionary used to decode" rows="2" wrap="soft" cols="10">{"Every":"😀","and":"😄","carried":"😍","carrying":"😆","confidante":"😜","else":"🙂","every":"🤣","everyone":"😌","for":"😅","friend":"😃","had":"😁","heart":"😛","like":"😙","person":"😬","reflected":"😋","reflection":"😗","secret":"😚","someone":"😊","star":"😂","the":"😝","there":"😇","this":"😘","was":"😉","who":"🙃"}</textarea></td>
+        <td><button id="dictionary_decode_btn">Decode</button></td>
+        <td><textarea readonly="true" id="dictionary_decode_out" placeholder="Press Decode" rows="6" wrap="soft" cols="20"> “Every person had a star, every star had a friend, and for every person carrying a star there was someone else who reflected it, and everyone carried this reflection like a secret confidante in the heart.”</textarea></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 </div>
 
-<div id="home">
   <h1>About</h1>
   <p>
-    <strong>Emoji-compressor</strong> is an open-source library, written in Go, as a side-project. This website is just a demo for
+    <strong>Emoji-compress</strong> is an open-source library, written in Go, as a side-project. This website is just a demo for
     the package.</p>
   <p>We have ported to Go some known basic encoding and compression algorithms and added the emoji twist. Some of the methods
     may result in smaller texts (as in the number of characters), but larger in bytes.</p>
