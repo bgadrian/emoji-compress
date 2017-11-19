@@ -1,57 +1,45 @@
 package lz78
 
 import (
+	"fmt"
+	"log"
 	"testing"
 )
 
-func TestCompressBasic(t *testing.T) {
-	in := "ababcba"
-	out := "|0000a||0000b||0001b||0000c||0002a|"
+func TestCompress(t *testing.T) {
 
-	r, err := Compress([]byte(in))
-	if err != nil {
-		t.Error(err)
+	tt := []struct {
+		name string
+		in   string
+		out  string
+	}{
+		{"Compress basic", "abababc", "😀a😀b😬b😂c"},
+		// {"Compress more", "ababcbababaaaaaaaaa", "😀a😀b0001b😀c0002a0005b0001a0007a0008a"},
+		// {"Compress repeat", "-!@-!@-!@-!@-!@-!@", "😀-😀!😀@0001!0003-0002@0004@0007-0002@"},
+
+		{"Single letter", "a", "😀a"},
+		//{"Compress more", "ababcbababaaaaaaaaa", "😀😬😀b0001b😀c0002a0005b0001a0007a0008a"},
+		//{"Compress repeat", "-!@-!@-!@-!@-!@-!@", "😀-😀!😀@0001!0003-0002@0004@0007-0002@"},
 	}
 
-	if r != out {
-		t.Errorf("Expected %s, got %s", out, r)
-	}
-}
+	for _, e := range tt {
+		r, err := Compress([]byte(e.in))
+		if err != nil {
+			t.Error(err)
+		}
 
-func TestCompressMore(t *testing.T) {
-	in := "ababcbababaaaaaaaaa"
-	out := "|0000a||0000b||0001b||0000c||0002a||0005b||0001a||0007a||0008a|"
-
-	r, err := Compress([]byte(in))
-	if err != nil {
-		t.Error(err)
-	}
-
-	if r != out {
-		t.Errorf("Expected %s, got %s", out, r)
-	}
-}
-
-func TestCompressRepetableString(t *testing.T) {
-	in := "-!@-!@-!@-!@-!@-!@"
-	out := "|0000-||0000!||0000@||0001!||0003-||0002@||0004@||0007-||0002@|"
-
-	r, err := Compress([]byte(in))
-	if err != nil {
-		t.Error(err)
-	}
-
-	if r != out {
-		t.Errorf("Expected %s, got %s", out, r)
+		if r != e.out {
+			t.Errorf("%s expected %s, got %s", e.name, e.out, r)
+		}
 	}
 }
 
-// func ExampleCompress() {
-// 	in := "Play with emojis!"
-// 	out, err := Compress([]byte(in))
-// 	if err != nil {
-// 		log.Panic(err)
-// 	}
-// 	fmt.Printf("%s", out)
-// 	// Output: |0000P||0000l||0000a||0000y||0000 ||0000w||0000i||0000t||0000h||0005e||0000m||0000o||0000j||0007s||0000!|
-// }
+func ExampleCompress() {
+	in := "Play with emojis!"
+	out, err := Compress([]byte(in))
+	if err != nil {
+		log.Panic(err)
+	}
+	fmt.Printf("%s", out)
+	// Output: 😀P😀l😀a😀y😀 😀w😀i😀t😀h😃e😀m😀o😀j😅s😀!
+}

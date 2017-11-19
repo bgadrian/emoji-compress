@@ -6,6 +6,9 @@ If the original text doesn't have many repeating words, the "archive" will be lo
 
 The dictionary should be sent to the user/client so he can decode the string.
 
+### Demo
+We have built a full working demo at [emoji-compress.com](https://emoji-compress.com/) ‼
+
 ### Limitations:
 * you cannot have emojis in the original text
 * only works with a max of 1000 unique words

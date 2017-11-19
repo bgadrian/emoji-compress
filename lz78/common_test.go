@@ -259,7 +259,7 @@ func compareInOut(s string) error {
 		return err
 	}
 
-	d, err := Decompress(c)
+	d, err := DecompressString(c)
 	if err != nil {
 		return err
 	}

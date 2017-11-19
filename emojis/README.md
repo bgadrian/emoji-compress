@@ -3,6 +3,10 @@ The package emojis can be used as an iterator over most of the emoji in Unicode 
 
 Current count: **1183 emojis** from which **1011** have 1 rune length.
 
+### Demo
+We have built a full working demo at [emoji-compress.com](https://emoji-compress.com/) ‼
+
+### Example 
 ```go
 db := Iterator{}
 db.Next() //returns "😀"

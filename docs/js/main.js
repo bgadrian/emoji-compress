@@ -41,6 +41,15 @@ document.addEventListener('DOMContentLoaded', function () {
         var dictOut = document.getElementById(idprefix + "dictionary_out")
 
         button.addEventListener("click", function () {
+
+            if (dictOut) {
+                //we are expecting a dictionary out so ...
+                textOut.value = "Loading ❂ ❂ ❂ "
+                dictOut.value = "Loading ❂ ❂ ❂ "
+            } else {
+                textOut.value = "Loading ❂ ❂ ❂ "
+            }
+
             API.call({
                 text: textIn.value,
                 dict: (dictIn ? JSON.parse(dictIn.value) : null)

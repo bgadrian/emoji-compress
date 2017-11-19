@@ -42,6 +42,11 @@ var table = []one{
 		http.StatusOK, &Response{Ok: true, Result: dicres1}},
 	{"/dictionary/decode", &Request{Text: dicres1.Archive, Dict: dicres1.Words},
 		http.StatusOK, &Response{Ok: true, Result: dicres1.Source}},
+
+	{"/lz78/encode", &Request{Text: "Play with emojis!"},
+		http.StatusOK, &Response{Ok: true, Result: "😀P😀l😀a😀y😀 😀w😀i😀t😀h😃e😀m😀o😀j😅s😀!"}},
+	{"/lz78/decode", &Request{Text: "😀P😀l😀a😀y😀 😀w😀i😀t😀h😃e😀m😀o😀j😅s😀!"},
+		http.StatusOK, &Response{Ok: true, Result: "Play with emojis!"}},
 }
 
 func TestTableall(t *testing.T) {

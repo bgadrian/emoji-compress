@@ -89,6 +89,10 @@ func (h simpleHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		err = handleDictionary(OperationEncode, &req, &resp)
 	case "/dictionary/decode":
 		err = handleDictionary(OperationDecode, &req, &resp)
+	case "/lz78/encode":
+		err = handleLZ78(OperationEncode, &req, &resp)
+	case "/lz78/decode":
+		err = handleLZ78(OperationDecode, &req, &resp)
 	default:
 		err = err404
 	}

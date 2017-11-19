@@ -8,6 +8,10 @@ but definately will have more bytes in length, so is not an
 efficient compresison method, is just an encoding like base64,
 but way cooler and friendlier.
 
+
+### Demo
+We have built a full working demo at [emoji-compress.com](https://emoji-compress.com/) ‼
+
 ### How
 The algorithm is very simple: *it split the string in a series of bytes,
 and map each byte by its value to an unique emoji.*

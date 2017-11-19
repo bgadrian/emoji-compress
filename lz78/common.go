@@ -1,9 +1,6 @@
-//Package lz78 TODO
-//
-//https://w3.ual.es/~vruiz/Docencia/Apuntes/Coding/Text/02-string_encoding/03-LZ78/index.html
-//http://compressions.sourceforge.net/LempelZiv.html
-//http://www.stringology.org/DataCompression/lz78/index_en.html
-//https://unicode.org/emoji/charts/full-emoji-list.html
+/*Package lz78
+The package LZ78 can be used to compress and decompress strings into something nice: emojis.
+The result of compressing with LZ78 will have more bytes in length than original string if it used for a small string, so not every time is an efficient compression method, is just a cooler and friendlier method that use emojis.*/
 package lz78
 
 import (

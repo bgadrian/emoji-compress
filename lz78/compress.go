@@ -4,12 +4,13 @@ import (
 	"unicode/utf8"
 )
 
-//CompressString ...
+// CompressString is an overload for Compress.
 func CompressString(s string) (string, error) {
 	return Compress([]byte(s))
 }
 
-//Compress ...
+// Compress it will iterate slice rune by rune.
+// Dictionary used to decompress will be embeded into output string.
 func Compress(input []byte) (string, error) {
 
 	dic := dictionary{}

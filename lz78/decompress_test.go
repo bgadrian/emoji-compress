@@ -6,22 +6,20 @@ import (
 	"testing"
 )
 
-type table struct {
-	name string
-	in   string
-	out  string
-}
-
 func TestDecompress(t *testing.T) {
 
-	tt := []table{
-		{"Test1", "|0000a||0000b||0001b||0000c||0002a|", "ababcba"},
-		{"Test2", "|0000a||0000b||0001b||0003c|", "abababc"},
-		{"Test3", "|0000|||0000b||0001b||0003c|", "|b|b|bc"},
+	tt := []struct {
+		name string
+		in   string
+		out  string
+	}{
+		{"Decompress basic", "😀a😀b😬b😀c😁a", "ababcba"},
+		{"Decompress more", "😀a😀b😬b😂c", "abababc"},
+		{"Decompress repeat", "😀|😀b😬b😂c", "|b|b|bc"},
 	}
 
 	for _, e := range tt {
-		r, err := Decompress(e.in)
+		r, err := DecompressString(e.in)
 		if err != nil {
 			t.Error(err)
 		}
@@ -33,8 +31,8 @@ func TestDecompress(t *testing.T) {
 }
 
 func ExampleDecompress() {
-	in := "|0000P||0000l||0000a||0000y||0000 ||0000w||0000i||0000t||0000h||0005e||0000m||0000o||0000j||0007s||0000!|"
-	out, err := Decompress(in)
+	in := "😀P😀l😀a😀y😀 😀w😀i😀t😀h😃e😀m😀o😀j😅s😀!"
+	out, err := DecompressString(in)
 	if err != nil {
 		log.Panic(err)
 	}

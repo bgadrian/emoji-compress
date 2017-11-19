@@ -38,8 +38,8 @@ func handleLZ78(op int, req *Request, resp *Response) (err error) {
 	switch op {
 	case OperationEncode:
 		resp.Result, err = lz78.CompressString(req.Text)
-	// case OperationDecode:
-	// 	resp.Result, err = lz78.Decompress(req.Text)
+	case OperationDecode:
+		resp.Result, err = lz78.DecompressString(req.Text)
 	default:
 		err = errMethod
 	}

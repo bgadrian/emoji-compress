@@ -4,9 +4,15 @@ import (
 	"io"
 )
 
-//Decompress ...
-func Decompress(s string) (output string, err error) {
-	dec := newDecoder(s)
+// DecompressString is an overload for Decompress.
+func DecompressString(s string) (string, error) {
+	return Decompress([]byte(s))
+}
+
+// Decompress will iterate input that has embeded dictionary inside of it
+// and will recompose the original string
+func Decompress(input []byte) (output string, err error) {
+	dec := newDecoder(input)
 	var phrase string
 	var e error
 
