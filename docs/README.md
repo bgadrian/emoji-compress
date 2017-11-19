@@ -1,6 +1,6 @@
 # Emoji-compress
 
-**Emoji-compress** is an open-source library, written in Go, as a side-project. We have ported to Go some known basic encoding and compression algorithms and added the emoji twist. Some of the methods may result in smaller texts (as in the number of characters), but larger in bytes.
+**Emoji-compress** is an open-source library, written in Go, as a side-project. We have ported a few known basic encoding and compression algorithms and added the emoji twist. Some of the methods may result in smaller texts (as in the number of characters), but larger in bytes.
 
 All packages have unit tests and GoDocumentation. The project also contains a demo web server and website, which aren't supposed to be uses in a (serious, non-emojified) production env.
 
